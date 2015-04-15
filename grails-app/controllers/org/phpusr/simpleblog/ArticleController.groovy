@@ -11,7 +11,7 @@ class ArticleController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def springSecurityService
+    def userService
 
     @Secured(['permitAll'])
     def index(Integer max) {
@@ -35,8 +35,7 @@ class ArticleController {
             return
         }
 
-        def user = User.get(springSecurityService.principal.id as Long)
-        articleInstance.user = user
+        articleInstance.user = userService.user
 
         if (articleInstance.hasErrors()) {
             respond articleInstance.errors, view:'create'
@@ -65,8 +64,7 @@ class ArticleController {
             return
         }
 
-        def user = User.get(springSecurityService.principal.id as Long)
-        if (articleInstance.user != user) return
+        if (articleInstance.user != userService.user) return
 
         if (articleInstance.hasErrors()) {
             respond articleInstance.errors, view:'edit'
@@ -92,8 +90,7 @@ class ArticleController {
             return
         }
 
-        def user = User.get(springSecurityService.principal.id as Long)
-        if (articleInstance.user != user) return
+        if (articleInstance.user != userService.user) return
 
         articleInstance.delete flush:true
 
