@@ -1,16 +1,5 @@
 <%@ page import="org.phpusr.simpleblog.Article" %>
 
-
-
-<div class="fieldcontain ${hasErrors(bean: articleInstance, field: 'user', 'error')} required">
-	<label for="user">
-		<g:message code="article.user.label" default="User" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:select id="user" name="user.id" from="${org.phpusr.simpleblog.User.list()}" optionKey="id" required="" value="${articleInstance?.user?.id}" class="many-to-one"/>
-
-</div>
-
 <div class="fieldcontain ${hasErrors(bean: articleInstance, field: 'title', 'error')} required">
 	<label for="title">
 		<g:message code="article.title.label" default="Title" />

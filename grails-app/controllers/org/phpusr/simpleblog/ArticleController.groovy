@@ -1,20 +1,25 @@
 package org.phpusr.simpleblog
 
-
+import grails.plugin.springsecurity.annotation.Secured
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
+@Secured(['ROLE_WRITER'])
 @Transactional(readOnly = true)
 class ArticleController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
+    def springSecurityService
+
+    @Secured(['permitAll'])
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         respond Article.list(params), model:[articleInstanceCount: Article.count()]
     }
 
+    @Secured(['permitAll'])
     def show(Article articleInstance) {
         respond articleInstance
     }
@@ -29,6 +34,9 @@ class ArticleController {
             notFound()
             return
         }
+
+        def user = User.get(springSecurityService.principal.id as Long)
+        articleInstance.user = user
 
         if (articleInstance.hasErrors()) {
             respond articleInstance.errors, view:'create'
@@ -57,6 +65,9 @@ class ArticleController {
             return
         }
 
+        def user = User.get(springSecurityService.principal.id as Long)
+        if (articleInstance.user != user) return
+
         if (articleInstance.hasErrors()) {
             respond articleInstance.errors, view:'edit'
             return
@@ -80,6 +91,9 @@ class ArticleController {
             notFound()
             return
         }
+
+        def user = User.get(springSecurityService.principal.id as Long)
+        if (articleInstance.user != user) return
 
         articleInstance.delete flush:true
 
