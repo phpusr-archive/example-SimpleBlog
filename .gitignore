@@ -1,0 +1,9 @@
+/.idea/
+/target/
+/out/
+/wrapper/
+
+*.iml
+/grails-app/migrations/diff.groovy
+/grailsw
+/grailsw.bat
