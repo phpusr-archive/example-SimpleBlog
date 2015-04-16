@@ -9,7 +9,9 @@ class UserService {
 
     /** Возвращает залогненного пользователя */
     def getUser() {
-        User.get(springSecurityService.principal.id as long)
+        if (springSecurityService.loggedIn) {
+            User.get(springSecurityService.principal.id as Long)
+        } else null
     }
 
 }
