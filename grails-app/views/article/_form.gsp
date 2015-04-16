@@ -1,5 +1,7 @@
 <%@ page import="org.phpusr.simpleblog.Article" %>
 
+<sec:hiddenId name="user.id" />
+
 <div class="fieldcontain ${hasErrors(bean: articleInstance, field: 'title', 'error')} required">
 	<label for="title">
 		<g:message code="article.title.label" default="Title" />

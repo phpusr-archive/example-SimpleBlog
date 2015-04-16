@@ -35,7 +35,7 @@ class ArticleController {
             return
         }
 
-        articleInstance.user = userService.user
+        if (articleInstance.user != userService.user) return
 
         if (articleInstance.hasErrors()) {
             respond articleInstance.errors, view:'create'
