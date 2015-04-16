@@ -22,6 +22,9 @@
             <sec:ifLoggedIn>
                 (<sec:username />) <g:link controller="logout"><g:message code="default.logout.label" default="Logout" /></g:link>
             </sec:ifLoggedIn>
+            <sec:ifNotLoggedIn>
+                <g:link controller="login"><g:message code="default.login.label" default="Login" /></g:link>
+            </sec:ifNotLoggedIn>
         </div>
 		<g:layoutBody/>
 		<div class="footer" role="contentinfo"></div>
