@@ -16,15 +16,22 @@
             /** Вывод комментариев */
             function getComments() {
                 $.get("${createLink(controller: 'comment', action: 'listAjax')}", {articleId: "${articleInstance?.id}"}, function (data) {
-                    console.log(data);
+                    $("#comments").empty();
                     $.each(data, function(index, value) {
                         var li = $("<li/>", {class: 'fieldcontain'});
-                        var user = $("<div/>", {}).html($("<a/>", {href: userLink, text: value.userName}));
-                        var comment = $("<div/>", {text: value.body});
-                        li.append(user).append(comment);
-                        $("#comments").append(li);
+                        var user = $("<div/>", {
+                            html: $("<a/>", { href: userLink, text: value.userName })
+                        }).appendTo(li);
+                        var comment = $("<div/>", {text: value.body}).appendTo(li);
+                        $("#comments").prepend(li);
                     });
                 });
+            }
+
+            /** Успешное добавление комментария */
+            function addCommentSuccess() {
+                $("#body").val('');
+                getComments();
             }
         </script>
 	</head>
@@ -83,8 +90,18 @@
                 </g:form>
             </sec:ifAuthor>
 		</div>
+
         <div class="content">
             <h1><g:message code="article.commets.label" default="Comments" /></h1>
+            <sec:ifLoggedIn>
+                <div class="comment-form">
+                    <g:formRemote name="formComment" url="[controller: 'comment', action: 'addAjax']" onSuccess="addCommentSuccess()">
+                        <g:hiddenField name="article.id" value="${articleInstance?.id}" />
+                        <g:textArea name="body" />
+                        <g:submitButton name="submit" />
+                    </g:formRemote>
+                </div>
+            </sec:ifLoggedIn>
             <ol id="comments" class="property-list">
             </ol>
         </div>

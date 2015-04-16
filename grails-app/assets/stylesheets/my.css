@@ -1,0 +1,11 @@
+div.comment-form {
+    margin: 20px 0 0 45px;
+}
+div.comment-form textarea {
+    width: 500px;
+    height: 100px;
+}
+div.comment-form input[type=submit] {
+    display: block;
+    margin: 10px 0 0 0;
+}

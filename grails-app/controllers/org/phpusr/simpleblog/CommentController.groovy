@@ -1,12 +1,14 @@
 package org.phpusr.simpleblog
 
+import grails.converters.JSON
 import grails.plugin.springsecurity.annotation.Secured
 
 @Secured(['IS_AUTHENTICATED_REMEMBERED'])
 class CommentController {
 
+    def userService
+
     def listAjax(Long articleId) {
-        println(params)
         def comments = Comment.findAll {
             article.id == articleId
         }
@@ -22,6 +24,16 @@ class CommentController {
                 }
             }
         }
+    }
+
+    def addAjax(Comment commentInstance) {
+        println(params)
+        commentInstance.user = userService.user
+        commentInstance.save(flush: true)
+
+
+        def response = [status: 'OK']
+        render response as JSON
     }
 
 }
