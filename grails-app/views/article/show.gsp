@@ -11,21 +11,38 @@
                 getComments();
             });
 
+            /** Ссылка на пользователя */
             var userLink = "${createLink(controller: 'user', action: 'show')}";
+
+            /** Администратор-ли */
+            var isAdmin = ${isAdmin};
 
             /** Вывод комментариев */
             function getComments() {
-                $.get("${createLink(controller: 'comment', action: 'listAjax')}", {articleId: "${articleInstance?.id}"}, function (data) {
+                $.get("${createLink(controller: 'comment', action: 'listAjax')}", {articleId: "${articleInstance?.id}"}, function(data) {
                     $("#comments").empty();
                     $.each(data, function(index, value) {
                         var li = $("<li/>", {class: 'fieldcontain'});
-                        var user = $("<div/>", {
+                        // Ссылка на пользователя
+                        $("<div/>", {
                             html: $("<a/>", { href: userLink, text: value.userName })
                         }).appendTo(li);
-                        var comment = $("<div/>", {text: value.body}).appendTo(li);
+                        // Комментарий
+                        $("<div/>", {text: value.body}).appendTo(li);
+                        // Ссылка на удаление
+                        if (isAdmin) $("<span/>", {html: $("<a/>", {href: '', onclick: 'return deleteComment(' + value.id + ')', text: 'Remove'})}).appendTo(li);
                         $("#comments").prepend(li);
                     });
                 });
+            }
+
+            /** Удаление комментария */
+            function deleteComment(id) {
+                $.post("${createLink(controller: 'comment', action: 'deleteAjax')}/" + id, function(data) {
+                    getComments();
+                });
+
+                return false;
             }
 
             /** Успешное добавление комментария */

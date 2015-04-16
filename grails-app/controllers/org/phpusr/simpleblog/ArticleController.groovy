@@ -16,12 +16,12 @@ class ArticleController {
     @Secured(['permitAll'])
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond Article.list(params), model:[articleInstanceCount: Article.count()]
+        respond Article.list(params), model: [articleInstanceCount: Article.count()]
     }
 
     @Secured(['permitAll'])
     def show(Article articleInstance) {
-        respond articleInstance
+        respond articleInstance, model: [isAdmin: userService.isAdmin()]
     }
 
     def create() {

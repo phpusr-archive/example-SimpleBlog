@@ -14,4 +14,10 @@ class UserService {
         } else null
     }
 
+    /** Является-ли пользователь администратором */
+    def isAdmin() {
+        def adminRole = Role.findByAuthority('ROLE_ADMIN')
+        user?.authorities?.contains(adminRole) ?: false
+    }
+
 }

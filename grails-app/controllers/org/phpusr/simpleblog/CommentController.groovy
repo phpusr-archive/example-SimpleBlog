@@ -6,8 +6,13 @@ import grails.plugin.springsecurity.annotation.Secured
 @Secured(['IS_AUTHENTICATED_REMEMBERED'])
 class CommentController {
 
+    static allowedMethods = [deleteAjax: "POST"]
+
     def userService
 
+    private static OkStatus = [status: 'OK']
+
+    @Secured(['permitAll'])
     def listAjax(Long articleId) {
         def comments = Comment.findAll {
             article.id == articleId
@@ -17,6 +22,7 @@ class CommentController {
             array {
                 for (comment in comments) {
                     c = {
+                        id = comment.id
                         body = comment.body
                         userId = comment.userId
                         userName = comment.user.username
@@ -26,14 +32,18 @@ class CommentController {
         }
     }
 
-    def addAjax(Comment commentInstance) {
-        println(params)
-        commentInstance.user = userService.user
-        commentInstance.save(flush: true)
+    def addAjax(Comment comment) {
+        comment.user = userService.user
+        comment.save(flush: true)
 
+        render OkStatus as JSON
+    }
 
-        def response = [status: 'OK']
-        render response as JSON
+    @Secured(['ROLE_ADMIN'])
+    def deleteAjax(Comment comment) {
+        comment.delete(flush: true)
+
+        render OkStatus as JSON
     }
 
 }
