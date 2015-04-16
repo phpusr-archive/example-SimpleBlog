@@ -1,3 +1,5 @@
+import org.phpusr.simpleblog.Article
+import org.phpusr.simpleblog.Comment
 import org.phpusr.simpleblog.Role
 import org.phpusr.simpleblog.User
 import org.phpusr.simpleblog.UserRole
@@ -18,6 +20,10 @@ class BootStrap {
         if (!adminUser.authorities.contains(writerRole)) UserRole.create(adminUser, writerRole)
         if (!userUser.authorities.contains(userRole)) UserRole.create(userUser, userRole)
         if (!writerUser.authorities.contains(writerRole)) UserRole.create(writerUser, writerRole)
+
+        def article = Article.findByTitle('Test') ?: new Article(user: writerUser, title: 'Test', body: 'Body').save(failOnError: true)
+        if (!Comment.findByArticleAndUserAndBody(article, adminUser, 'Cool!')) new Comment(article: article, user: adminUser, body: 'Cool!').save(failOnError: true)
+        if (!Comment.findByArticleAndUserAndBody(article, writerUser, 'Thanks.')) new Comment(article: article, user: writerUser, body: 'Thanks.').save(failOnError: true)
 
     }
     def destroy = {

@@ -6,6 +6,27 @@
 		<meta name="layout" content="main">
 		<g:set var="entityName" value="${message(code: 'article.label', default: 'Article')}" />
 		<title><g:message code="default.show.label" args="[entityName]" /></title>
+        <script type="text/javascript">
+            $(function() {
+                getComments();
+            });
+
+            var userLink = "${createLink(controller: 'user', action: 'show')}";
+
+            /** Вывод комментариев */
+            function getComments() {
+                $.get("${createLink(controller: 'comment', action: 'listAjax')}", {articleId: "${articleInstance?.id}"}, function (data) {
+                    console.log(data);
+                    $.each(data, function(index, value) {
+                        var li = $("<li/>", {class: 'fieldcontain'});
+                        var user = $("<div/>", {}).html($("<a/>", {href: userLink, text: value.userName}));
+                        var comment = $("<div/>", {text: value.body});
+                        li.append(user).append(comment);
+                        $("#comments").append(li);
+                    });
+                });
+            }
+        </script>
 	</head>
 	<body>
 		<a href="#show-article" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
@@ -62,5 +83,10 @@
                 </g:form>
             </sec:ifAuthor>
 		</div>
+        <div class="content">
+            <h1><g:message code="article.commets.label" default="Comments" /></h1>
+            <ol id="comments" class="property-list">
+            </ol>
+        </div>
 	</body>
 </html>
