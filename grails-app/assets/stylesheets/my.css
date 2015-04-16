@@ -9,3 +9,10 @@ div.comment-form input[type=submit] {
     display: block;
     margin: 10px 0 0 0;
 }
+div.comment-body {
+    float: left;
+}
+span.comment-delete a {
+    font-size: 10px;
+    margin: 0 0 0 3px;
+}

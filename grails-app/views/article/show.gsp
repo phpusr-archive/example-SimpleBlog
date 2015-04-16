@@ -28,9 +28,12 @@
                             html: $("<a/>", { href: userLink, text: value.userName })
                         }).appendTo(li);
                         // Комментарий
-                        $("<div/>", {text: value.body}).appendTo(li);
+                        $("<div/>", {text: value.body, class: 'comment-body'}).appendTo(li);
                         // Ссылка на удаление
-                        if (isAdmin) $("<span/>", {html: $("<a/>", {href: '', onclick: 'return deleteComment(' + value.id + ')', text: 'Remove'})}).appendTo(li);
+                        if (isAdmin) $("<span/>", {
+                            class: 'comment-delete',
+                            html: $("<a/>", {href: '', onclick: 'return deleteComment(' + value.id + ')', text: 'remove'})
+                        }).appendTo(li);
                         $("#comments").prepend(li);
                     });
                 });
